@@ -5,7 +5,7 @@ import ServiceCard from '../components/ServiceCard';
 import BeforeAfter from '../components/BeforeAfter';
 import LocationSelector from '../components/LocationSelector';
 import ContactForm from '../components/ContactForm';
-import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle, Zap, Car } from 'lucide-react';
+import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle, Zap, Car, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Typewriter: React.FC = () => {
   const texts = [
@@ -76,6 +76,117 @@ const InteractiveCar: React.FC = () => {
               <div className="w-6 h-1 bg-gradient-to-r from-transparent to-[#40E0D0] rounded-full animate-pulse delay-75"></div>
            </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const TestimonialCarousel: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext();
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+      setIsAnimating(false);
+    }, 500);
+  };
+
+  const handlePrev = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+      setIsAnimating(false);
+    }, 500);
+  };
+
+  return (
+    <div className="relative max-w-5xl mx-auto px-4 sm:px-12">
+      {/* Testimonial Display Area */}
+      <div className="relative min-h-[450px] sm:min-h-[350px] flex items-center justify-center">
+        {TESTIMONIALS.map((t, idx) => (
+          <div 
+            key={idx} 
+            className={`absolute inset-0 transition-all duration-1000 ease-in-out flex items-center justify-center ${
+              idx === currentIndex 
+                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' 
+                : 'opacity-0 translate-y-8 scale-95 pointer-events-none'
+            }`}
+          >
+            <div className="glass-card p-8 sm:p-12 rounded-[2.5rem] bg-[#0a0a0a]/50 border border-white/5 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-8 text-[#40E0D0]/5 pointer-events-none">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V4H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM2.017 21L2.017 18C2.017 16.8954 2.91243 16 4.017 16H7.017C7.56928 16 8.017 15.5523 8.017 15V9C8.017 8.44772 7.56928 8 7.017 8H3.017C2.46472 8 2.017 8.44772 2.017 9V11C2.017 11.5523 1.56928 12 1.017 12H0.017V4H10.017V15C10.017 18.3137 7.33072 21 4.017 21H2.017Z"/></svg>
+              </div>
+              
+              <div className="flex gap-1 text-[#40E0D0] mb-8 justify-center sm:justify-start">
+                 {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" className="animate-pulse" />)}
+              </div>
+              
+              <p className="text-gray-300 italic mb-12 leading-relaxed text-xl sm:text-2xl text-center sm:text-left font-medium">
+                "{t.text}"
+              </p>
+              
+              <div className="flex items-center gap-6 justify-center sm:justify-start">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-[#40E0D0] blur-xl opacity-20 animate-pulse"></div>
+                  <img src={t.image} className="w-20 h-20 rounded-2xl border-2 border-[#40E0D0]/40 group-hover:border-[#40E0D0] transition-all duration-500 relative z-10" alt={t.name} />
+                </div>
+                <div>
+                  <h5 className="font-black text-2xl group-hover:text-[#40E0D0] transition-colors tracking-tight">{t.name}</h5>
+                  <p className="text-xs text-[#40E0D0] font-black uppercase tracking-[0.3em] mt-1">{t.role}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="absolute top-1/2 -translate-y-1/2 -left-4 sm:-left-8 flex flex-col gap-4">
+        <button 
+          onClick={handlePrev}
+          className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-[#40E0D0] hover:text-black transition-all group shadow-xl backdrop-blur-md"
+        >
+          <ChevronLeft size={24} strokeWidth={3} className="group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
+      <div className="absolute top-1/2 -translate-y-1/2 -right-4 sm:-right-8 flex flex-col gap-4">
+        <button 
+          onClick={handleNext}
+          className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-[#40E0D0] hover:text-black transition-all group shadow-xl backdrop-blur-md"
+        >
+          <ChevronRight size={24} strokeWidth={3} className="group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
+
+      {/* Pagination Dots */}
+      <div className="flex justify-center gap-3 mt-12">
+        {TESTIMONIALS.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              if (isAnimating) return;
+              setIsAnimating(true);
+              setTimeout(() => {
+                setCurrentIndex(idx);
+                setIsAnimating(false);
+              }, 400);
+            }}
+            className={`h-2 rounded-full transition-all duration-500 ${
+              idx === currentIndex ? 'w-12 bg-[#40E0D0] shadow-[0_0_15px_rgba(64,224,208,0.5)]' : 'w-2 bg-gray-800 hover:bg-gray-700'
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
@@ -213,34 +324,17 @@ const Home: React.FC = () => {
         <BeforeAfter />
       </div>
 
-      {/* Testimonials com Reveal */}
-      <section className="py-32 bg-black border-t border-white/5">
+      {/* Testimonials Carousel Section */}
+      <section className="py-32 bg-black border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-20 reveal" ref={addToRefs}>
-            <h2 className="text-4xl sm:text-5xl font-black uppercase mb-4 tracking-tighter">O Relato dos <span className="text-[#40E0D0]">Apaixonados</span></h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#40E0D0] to-transparent mx-auto"></div>
+          <div className="text-center mb-24 reveal" ref={addToRefs}>
+            <span className="text-[#40E0D0] font-black text-xs uppercase tracking-[0.5em] mb-4 block">Showroom Feedback</span>
+            <h2 className="text-4xl sm:text-6xl font-black uppercase mb-4 tracking-tighter">O Relato dos <span className="text-[#40E0D0]">Apaixonados</span></h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#40E0D0] to-transparent mx-auto"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {TESTIMONIALS.map((t, idx) => (
-              <div key={idx} className="reveal" ref={addToRefs} style={{ transitionDelay: `${idx * 200}ms` }}>
-                <div className="glass-card p-12 rounded-[2rem] hover:-translate-y-4 transition-all duration-700 group relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 text-[#40E0D0]/10 group-hover:text-[#40E0D0]/20 transition-colors">
-                     <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V4H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM2.017 21L2.017 18C2.017 16.8954 2.91243 16 4.017 16H7.017C7.56928 16 8.017 15.5523 8.017 15V9C8.017 8.44772 7.56928 8 7.017 8H3.017C2.46472 8 2.017 8.44772 2.017 9V11C2.017 11.5523 1.56928 12 1.017 12H0.017V4H10.017V15C10.017 18.3137 7.33072 21 4.017 21H2.017Z"/></svg>
-                  </div>
-                  <div className="flex gap-1 text-[#40E0D0] mb-8">
-                     {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" className="animate-pulse" />)}
-                  </div>
-                  <p className="text-gray-300 italic mb-12 leading-relaxed text-lg group-hover:text-white transition-colors">"{t.text}"</p>
-                  <div className="flex items-center gap-5">
-                    <img src={t.image} className="w-16 h-16 rounded-2xl border-2 border-[#40E0D0]/30 group-hover:border-[#40E0D0] transition-all duration-500 rotate-3 group-hover:rotate-0" alt={t.name} />
-                    <div>
-                      <h5 className="font-bold text-xl group-hover:text-[#40E0D0] transition-colors">{t.name}</h5>
-                      <p className="text-[10px] text-gray-600 uppercase tracking-[0.2em] font-black">{t.role}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          
+          <div className="reveal" ref={addToRefs}>
+            <TestimonialCarousel />
           </div>
         </div>
       </section>
