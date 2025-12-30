@@ -18,14 +18,43 @@
       .turquoise-glow {
         text-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
       }
-      .btn-pulse {
-        animation: pulse 2s infinite;
+      
+      /* Animação de entrada suave */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
       }
-      @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(64, 224, 208, 0.4); }
-        70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(64, 224, 208, 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(64, 224, 208, 0); }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
       }
+
+      /* Efeito de brilho nos botões */
+      .btn-neon {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+      .btn-neon::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(64, 224, 208, 0.2);
+        transform: rotate(45deg);
+        transition: all 0.5s;
+        opacity: 0;
+      }
+      .btn-neon:hover::after {
+        opacity: 1;
+        left: 100%;
+        top: 100%;
+      }
+
+      /* Cursor da máquina de escrever */
       .typewriter-cursor::after {
         content: '|';
         animation: blink 1s step-end infinite;
@@ -36,14 +65,45 @@
         from, to { opacity: 1; }
         50% { opacity: 0; }
       }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+
+      /* Efeito de scanline no Hero */
+      .scanline {
+        width: 100%;
+        height: 100px;
+        z-index: 5;
+        background: linear-gradient(0deg, rgba(64, 224, 208, 0) 0%, rgba(64, 224, 208, 0.05) 50%, rgba(64, 224, 208, 0) 100%);
+        opacity: 0.1;
+        position: absolute;
+        bottom: 100%;
+        animation: scanline 8s linear infinite;
       }
+      @keyframes scanline {
+        0% { bottom: 100%; }
+        100% { bottom: -100px; }
+      }
+
+      /* Animação do Carro Racing ao subir */
+      .car-racing {
+        position: fixed;
+        bottom: -100px;
+        right: 24px;
+        z-index: 100;
+        pointer-events: none;
+        transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+      .car-racing.active {
+        animation: race-up 1.2s ease-in-out forwards;
+      }
+      @keyframes race-up {
+        0% { transform: translateY(0) scale(1); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+      }
+
       .hero-gradient {
-        background: radial-gradient(circle at 50% 50%, rgba(64, 224, 208, 0.1) 0%, transparent 70%);
+        background: radial-gradient(circle at 50% 50%, rgba(64, 224, 208, 0.15) 0%, transparent 70%);
       }
+
       /* Custom scrollbar */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: #000; }

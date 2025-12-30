@@ -1,11 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SERVICES, TESTIMONIALS } from '../constants';
 import ServiceCard from '../components/ServiceCard';
 import BeforeAfter from '../components/BeforeAfter';
 import LocationSelector from '../components/LocationSelector';
 import ContactForm from '../components/ContactForm';
-import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle } from 'lucide-react';
+import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle, Zap } from 'lucide-react';
 
 const Typewriter: React.FC = () => {
   const texts = [
@@ -28,11 +28,11 @@ const Typewriter: React.FC = () => {
         setSpeed(50);
       } else {
         setCurrentText(fullText.substring(0, currentText.length + 1));
-        setSpeed(150);
+        setSpeed(120);
       }
 
       if (!isDeleting && currentText === fullText) {
-        setTimeout(() => setIsDeleting(true), 2000);
+        setTimeout(() => setIsDeleting(true), 2500);
       } else if (isDeleting && currentText === "") {
         setIsDeleting(false);
         setCurrentTextIndex((prev) => (prev + 1) % texts.length);
@@ -44,102 +44,129 @@ const Typewriter: React.FC = () => {
   }, [currentText, isDeleting, currentTextIndex, speed]);
 
   return (
-    <span className="typewriter-cursor text-[#40E0D0] drop-shadow-[0_0_10px_rgba(64,224,208,0.5)]">
+    <span className="typewriter-cursor text-[#40E0D0] drop-shadow-[0_0_15px_rgba(64,224,208,0.6)]">
       {currentText}
     </span>
   );
 };
 
 const Home: React.FC = () => {
+  const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    revealRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const addToRefs = (el: HTMLDivElement | null) => {
+    if (el && !revealRefs.current.includes(el)) {
+      revealRefs.current.push(el);
+    }
+  };
+
   return (
     <div className="flex flex-col bg-black">
-      {/* Hero Section */}
+      {/* Hero Section Refinada */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=1920" 
             alt="Hero Background" 
-            className="w-full h-full object-cover opacity-30 scale-105 animate-[pulse_10s_infinite]"
+            className="w-full h-full object-cover opacity-25 scale-110 animate-[pulse_15s_infinite]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black"></div>
-          <div className="absolute inset-0 hero-gradient"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black"></div>
+          <div className="absolute inset-0 hero-gradient opacity-60"></div>
+          <div className="scanline"></div>
         </div>
 
         <div className="container mx-auto relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm animate-fade-in">
-            <div className="w-2 h-2 rounded-full bg-[#40E0D0] animate-pulse"></div>
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-300">Unidade Curitiba - Aberto Agora</span>
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl animate-[bounce_3s_infinite] shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+            <Zap className="text-[#40E0D0] animate-pulse" size={14} />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#40E0D0]">Referência em Curitiba</span>
           </div>
           
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter uppercase leading-none turquoise-glow">
-            FAST CAR <br /> 
-            <span className="text-2xl sm:text-4xl md:text-5xl block mt-2 min-h-[1.5em] lg:min-h-[auto]">
+          <h1 className="text-4xl sm:text-7xl md:text-9xl font-black mb-6 tracking-tighter uppercase leading-none turquoise-glow">
+            FAST <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">CAR</span> <br /> 
+            <div className="text-2xl sm:text-4xl md:text-5xl mt-4 min-h-[1.5em] lg:min-h-[auto] font-extrabold lowercase italic">
               <Typewriter />
-            </span>
+            </div>
           </h1>
           
-          <p className="text-base sm:text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto font-medium leading-relaxed px-4">
-            Transformamos veículos comuns em obras de arte. Referência em cuidado automotivo de alto padrão com tecnologia de ponta.
+          <p className="text-base sm:text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed px-4 opacity-0 animate-[fade-in_1s_ease-out_forwards_0.5s]">
+            Transformamos veículos comuns em obras de arte automotiva. Tecnologia 9H e cuidado artesanal para quem exige o impossível.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center px-4 opacity-0 animate-[fade-in_1s_ease-out_forwards_1s]">
             <a 
               href="#contato" 
-              className="w-full sm:w-auto bg-[#40E0D0] text-black px-10 py-5 rounded-full font-black text-lg hover:scale-105 transition-all btn-pulse uppercase tracking-tight shadow-[0_0_30px_rgba(64,224,208,0.3)]"
+              className="w-full sm:w-auto bg-[#40E0D0] text-black px-12 py-5 rounded-full font-black text-lg hover:scale-110 hover:-rotate-1 transition-all btn-pulse btn-neon uppercase tracking-tighter shadow-[0_0_40px_rgba(64,224,208,0.4)]"
             >
-              Falar com um Especialista
+              Consultar Orçamento
             </a>
             <a 
               href="#servicos" 
-              className="w-full sm:w-auto bg-white/5 backdrop-blur-md text-white border border-white/10 px-10 py-5 rounded-full font-black text-lg hover:bg-white/10 transition-all uppercase tracking-tight"
+              className="w-full sm:w-auto bg-white/5 backdrop-blur-xl text-white border border-white/20 px-12 py-5 rounded-full font-black text-lg hover:bg-white/10 hover:scale-105 transition-all uppercase tracking-tighter"
             >
-              Ver Portfólio
+              Portfólio 2024
             </a>
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
-           <ChevronDown size={32} className="text-[#40E0D0]" />
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-[bounce_2s_infinite] opacity-30 hover:opacity-100 transition-opacity cursor-pointer">
+           <ChevronDown size={40} className="text-[#40E0D0]" />
         </div>
       </section>
 
-      {/* Trust Stats Section */}
-      <section className="py-12 bg-[#080808] border-y border-white/5 overflow-hidden">
+      {/* Trust Stats com Reveal */}
+      <section className="py-16 bg-[#080808] border-y border-white/5 overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-            <div className="text-center group cursor-default">
-              <div className="text-2xl sm:text-4xl font-black text-[#40E0D0] group-hover:scale-110 transition-transform">+10.000</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Carros Detalhados</div>
-            </div>
-            <div className="text-center group cursor-default">
-              <div className="text-2xl sm:text-4xl font-black text-[#40E0D0] group-hover:scale-110 transition-transform">100%</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Satisfação</div>
-            </div>
-            <div className="text-center group cursor-default">
-              <div className="text-2xl sm:text-4xl font-black text-[#40E0D0] group-hover:scale-110 transition-transform">+12 Anos</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Experiência</div>
-            </div>
-            <div className="text-center group cursor-default">
-              <div className="text-2xl sm:text-4xl font-black text-[#40E0D0] group-hover:scale-110 transition-transform">TOP 1</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Avaliação Google</div>
-            </div>
+            {[
+              { label: "Carros Detalhados", val: "+10.000" },
+              { label: "Satisfação", val: "100%" },
+              { label: "Experiência", val: "+12 Anos" },
+              { label: "Avaliação Google", val: "TOP 1" }
+            ].map((stat, i) => (
+              <div key={i} className="text-center group cursor-default reveal" ref={addToRefs}>
+                <div className="text-3xl sm:text-5xl font-black text-[#40E0D0] group-hover:scale-110 transition-transform duration-500">{stat.val}</div>
+                <div className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-600 font-bold mt-2">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section id="servicos" className="py-24 relative overflow-hidden">
+      {/* Services Grid com animações de entrada escalonadas */}
+      <section id="servicos" className="py-32 relative overflow-hidden bg-black">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-             <div className="max-w-xl">
-                <span className="text-[#40E0D0] font-bold text-xs uppercase tracking-[0.3em] mb-4 block">O que fazemos de melhor</span>
-                <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter">Nossos <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#40E0D0] to-white">Serviços</span></h2>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 reveal" ref={addToRefs}>
+             <div className="max-w-2xl">
+                <span className="text-[#40E0D0] font-black text-xs uppercase tracking-[0.5em] mb-4 block">Craftsmanship</span>
+                <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter leading-none">
+                  Nossos <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#40E0D0] via-white to-gray-600">Serviços</span>
+                </h2>
              </div>
-             <p className="text-gray-400 text-sm md:text-right max-w-sm">Soluções completas para proteger e valorizar seu veículo com o que há de mais moderno na engenharia estética.</p>
+             <p className="text-gray-500 text-sm md:text-right max-w-sm font-medium leading-relaxed">
+               Engenharia estética focada em preservação de valor e estética absoluta. Utilizamos apenas as melhores químicas globais.
+             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {SERVICES.map((service, idx) => (
-              <div key={service.id} className="animate-fade-in" style={{ animationDelay: `${idx * 100}ms` }}>
+              <div key={service.id} className="reveal" ref={addToRefs} style={{ transitionDelay: `${idx * 150}ms` }}>
                 <ServiceCard service={service} />
               </div>
             ))}
@@ -147,67 +174,35 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Before After Section */}
-      <BeforeAfter />
+      {/* Before After com Reveal */}
+      <div className="reveal" ref={addToRefs}>
+        <BeforeAfter />
+      </div>
 
-      {/* Features Detail */}
-      <section className="py-24 bg-[#050505]">
+      {/* Testimonials com Reveal */}
+      <section className="py-32 bg-black border-t border-white/5">
         <div className="container mx-auto px-6">
-           <div className="grid md:grid-cols-2 gap-20 items-center">
-              <div className="relative">
-                 <img 
-                   src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=800" 
-                   className="rounded-3xl shadow-[0_0_50px_rgba(64,224,208,0.15)] grayscale hover:grayscale-0 transition-all duration-700" 
-                   alt="Interior de Luxo"
-                 />
-                 <div className="absolute -bottom-10 -right-10 bg-[#40E0D0] p-8 rounded-3xl hidden lg:block">
-                    <Award size={48} className="text-black" />
-                 </div>
-              </div>
-              <div className="space-y-8">
-                 <h3 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter">Padrão <span className="text-[#40E0D0]">Fast Car</span> de Qualidade</h3>
-                 <p className="text-gray-400 leading-relaxed text-lg">Não somos um lava-jato. Somos um estúdio de detalhamento. Cada veículo que entra em nossa unidade recebe um diagnóstico técnico exclusivo.</p>
-                 <ul className="space-y-6">
-                    {[
-                      { title: "Produtos Biodegradáveis", desc: "Cuidamos do seu carro e do meio ambiente." },
-                      { title: "Técnicos Certificados", desc: "Mão de obra treinada pelas melhores academias." },
-                      { title: "Iluminação de Precisão", desc: "Estúdio com luzes frias para identificar cada detalhe." }
-                    ].map((item, i) => (
-                      <li key={i} className="flex gap-4 group">
-                         <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#40E0D0] group-hover:bg-[#40E0D0] group-hover:text-black transition-all">
-                            <CheckCircle size={24} />
-                         </div>
-                         <div>
-                            <h5 className="font-bold text-lg">{item.title}</h5>
-                            <p className="text-sm text-gray-500">{item.desc}</p>
-                         </div>
-                      </li>
-                    ))}
-                 </ul>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-24 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-black uppercase mb-4">A Voz de quem <span className="text-[#40E0D0]">Confia</span></h2>
-            <div className="w-20 h-1 bg-[#40E0D0] mx-auto"></div>
+          <div className="text-center mb-20 reveal" ref={addToRefs}>
+            <h2 className="text-4xl sm:text-5xl font-black uppercase mb-4 tracking-tighter">O Relato dos <span className="text-[#40E0D0]">Apaixonados</span></h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#40E0D0] to-transparent mx-auto"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {TESTIMONIALS.map((t, idx) => (
-              <div key={idx} className="glass-card p-10 rounded-3xl hover:-translate-y-2 transition-all duration-500 group">
-                <div className="flex gap-1 text-[#40E0D0] mb-6">
-                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                </div>
-                <p className="text-gray-300 italic mb-10 leading-relaxed group-hover:text-white transition-colors">"{t.text}"</p>
-                <div className="flex items-center gap-4">
-                  <img src={t.image} className="w-14 h-14 rounded-full border-2 border-[#40E0D0]/30 group-hover:border-[#40E0D0] transition-colors" alt={t.name} />
-                  <div>
-                    <h5 className="font-bold group-hover:text-[#40E0D0] transition-colors">{t.name}</h5>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest">{t.role}</p>
+              <div key={idx} className="reveal" ref={addToRefs} style={{ transitionDelay: `${idx * 200}ms` }}>
+                <div className="glass-card p-12 rounded-[2rem] hover:-translate-y-4 transition-all duration-700 group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 text-[#40E0D0]/10 group-hover:text-[#40E0D0]/20 transition-colors">
+                     <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V4H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM2.017 21L2.017 18C2.017 16.8954 2.91243 16 4.017 16H7.017C7.56928 16 8.017 15.5523 8.017 15V9C8.017 8.44772 7.56928 8 7.017 8H3.017C2.46472 8 2.017 8.44772 2.017 9V11C2.017 11.5523 1.56928 12 1.017 12H0.017V4H10.017V15C10.017 18.3137 7.33072 21 4.017 21H2.017Z"/></svg>
+                  </div>
+                  <div className="flex gap-1 text-[#40E0D0] mb-8">
+                     {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" className="animate-pulse" />)}
+                  </div>
+                  <p className="text-gray-300 italic mb-12 leading-relaxed text-lg group-hover:text-white transition-colors">"{t.text}"</p>
+                  <div className="flex items-center gap-5">
+                    <img src={t.image} className="w-16 h-16 rounded-2xl border-2 border-[#40E0D0]/30 group-hover:border-[#40E0D0] transition-all duration-500 rotate-3 group-hover:rotate-0" alt={t.name} />
+                    <div>
+                      <h5 className="font-bold text-xl group-hover:text-[#40E0D0] transition-colors">{t.name}</h5>
+                      <p className="text-[10px] text-gray-600 uppercase tracking-[0.2em] font-black">{t.role}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -216,11 +211,11 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <LocationSelector />
-      <ContactForm />
+      <div className="reveal" ref={addToRefs}><LocationSelector /></div>
+      <div className="reveal" ref={addToRefs}><ContactForm /></div>
 
       {/* Enhanced Map Section */}
-      <section className="h-[450px] w-full relative">
+      <section className="h-[500px] w-full relative reveal" ref={addToRefs}>
         <iframe 
           title="Fast Car Location"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115348.51475753173!2d-49.35626214555823!3d-25.43207908996585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce4119760ad31%3A0x53544d2d0598dca2!2sCuritiba%2C%20PR!5e0!3m2!1spt-BR!2sbr!4v1716298372641!5m2!1spt-BR!2sbr" 
@@ -229,10 +224,13 @@ const Home: React.FC = () => {
           style={{ border: 0, filter: 'grayscale(1) invert(0.9) contrast(1.2)' }} 
           loading="lazy"
         ></iframe>
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black/40"></div>
-        <div className="absolute bottom-10 left-10 bg-black/80 backdrop-blur-md p-6 rounded-2xl border border-white/10 hidden md:block">
-           <h4 className="font-bold mb-2">Visite-nos</h4>
-           <p className="text-sm text-gray-400">Rua Desembargador Motta, 1234 <br /> Batel, Curitiba - PR</p>
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black/60"></div>
+        <div className="absolute bottom-10 left-10 bg-black/80 backdrop-blur-2xl p-8 rounded-3xl border border-white/10 hidden md:block hover:border-[#40E0D0]/50 transition-colors group">
+           <div className="flex items-center gap-3 mb-4">
+              <MapPin className="text-[#40E0D0] group-hover:animate-bounce" />
+              <h4 className="font-black uppercase tracking-widest text-sm">Visite Nosso Estúdio</h4>
+           </div>
+           <p className="text-sm text-gray-500 font-medium leading-relaxed">Rua Desembargador Motta, 1234 <br /> Batel, Curitiba - PR</p>
         </div>
       </section>
     </div>
