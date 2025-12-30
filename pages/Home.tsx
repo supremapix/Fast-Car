@@ -5,7 +5,7 @@ import ServiceCard from '../components/ServiceCard';
 import BeforeAfter from '../components/BeforeAfter';
 import LocationSelector from '../components/LocationSelector';
 import ContactForm from '../components/ContactForm';
-import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle, Zap } from 'lucide-react';
+import { Star, Shield, Award, MapPin, ChevronDown, CheckCircle, Zap, Car } from 'lucide-react';
 
 const Typewriter: React.FC = () => {
   const texts = [
@@ -47,6 +47,37 @@ const Typewriter: React.FC = () => {
     <span className="typewriter-cursor text-[#40E0D0] drop-shadow-[0_0_15px_rgba(64,224,208,0.6)]">
       {currentText}
     </span>
+  );
+};
+
+const InteractiveCar: React.FC = () => {
+  const [isRacing, setIsRacing] = useState(false);
+
+  const startRace = () => {
+    if (isRacing) return;
+    setIsRacing(true);
+    setTimeout(() => setIsRacing(false), 2600);
+  };
+
+  return (
+    <div className="relative h-24 w-full bg-[#050505] border-y border-white/5 overflow-hidden flex items-center cursor-pointer group" onClick={startRace}>
+      <div className="container mx-auto px-6 relative flex items-center justify-between">
+         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 group-hover:text-[#40E0D0] transition-colors">Acelere seu sonho <span className="hidden sm:inline">| Clique no carro</span></span>
+         <div className="flex gap-4 opacity-20">
+            {[...Array(10)].map((_, i) => <div key={i} className="w-2 h-8 bg-gray-500 skew-x-12"></div>)}
+         </div>
+      </div>
+      
+      <div className={`car-horizontal-race z-20 ${isRacing ? 'active' : ''}`} style={{ top: '50%', transform: 'translateY(-50%)' }}>
+        <div className="relative text-[#40E0D0] drop-shadow-[0_0_15px_rgba(64,224,208,0.8)]">
+           <Car size={48} fill="currentColor" />
+           <div className="absolute -left-8 top-1/2 -translate-y-1/2 flex gap-1">
+              <div className="w-4 h-1 bg-gradient-to-r from-transparent to-[#40E0D0] rounded-full animate-pulse"></div>
+              <div className="w-6 h-1 bg-gradient-to-r from-transparent to-[#40E0D0] rounded-full animate-pulse delay-75"></div>
+           </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -130,6 +161,9 @@ const Home: React.FC = () => {
            <ChevronDown size={40} className="text-[#40E0D0]" />
         </div>
       </section>
+
+      {/* Carro Interativo Animado */}
+      <InteractiveCar />
 
       {/* Trust Stats com Reveal */}
       <section className="py-16 bg-[#080808] border-y border-white/5 overflow-hidden">

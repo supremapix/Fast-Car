@@ -19,7 +19,6 @@
         text-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
       }
       
-      /* Animação de entrada suave */
       .reveal {
         opacity: 0;
         transform: translateY(30px);
@@ -30,7 +29,6 @@
         transform: translateY(0);
       }
 
-      /* Efeito de brilho nos botões */
       .btn-neon {
         position: relative;
         overflow: hidden;
@@ -54,7 +52,6 @@
         top: 100%;
       }
 
-      /* Cursor da máquina de escrever */
       .typewriter-cursor::after {
         content: '|';
         animation: blink 1s step-end infinite;
@@ -66,7 +63,6 @@
         50% { opacity: 0; }
       }
 
-      /* Efeito de scanline no Hero */
       .scanline {
         width: 100%;
         height: 100px;
@@ -85,26 +81,41 @@
       /* Animação do Carro Racing ao subir */
       .car-racing {
         position: fixed;
-        bottom: -100px;
-        right: 24px;
-        z-index: 100;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
         pointer-events: none;
-        transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        opacity: 0;
       }
       .car-racing.active {
-        animation: race-up 1.2s ease-in-out forwards;
+        animation: race-up 1.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
       }
       @keyframes race-up {
-        0% { transform: translateY(0) scale(1); opacity: 0; }
-        10% { opacity: 1; }
-        100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+        20% { transform: translateY(10px) scale(1.1); opacity: 1; }
+        100% { transform: translateY(-120vh) scale(1.5) rotate(-5deg); opacity: 0; }
+      }
+
+      /* Animação do Carro que cruza a tela na Home */
+      .car-horizontal-race {
+        position: absolute;
+        left: -200px;
+        transition: none;
+      }
+      .car-horizontal-race.active {
+        animation: race-horizontal 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+      }
+      @keyframes race-horizontal {
+        0% { left: -200px; transform: scaleX(1) skewX(0deg); }
+        10% { transform: scaleX(1.1) skewX(-10deg); }
+        90% { transform: scaleX(1.1) skewX(-10deg); }
+        100% { left: 120vw; transform: scaleX(1) skewX(0deg); }
       }
 
       .hero-gradient {
         background: radial-gradient(circle at 50% 50%, rgba(64, 224, 208, 0.15) 0%, transparent 70%);
       }
 
-      /* Custom scrollbar */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: #000; }
       ::-webkit-scrollbar-thumb { background: #111; border-radius: 10px; }
