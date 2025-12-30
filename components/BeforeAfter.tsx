@@ -6,7 +6,7 @@ const BeforeAfter: React.FC = () => {
 
   const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    const x = 'touches' in e ? (e as React.TouchEvent).touches[0].clientX : (e as React.MouseEvent).clientX;
     const pos = ((x - rect.left) / rect.width) * 100;
     setSliderPos(Math.min(Math.max(pos, 0), 100));
   };
@@ -40,22 +40,23 @@ const BeforeAfter: React.FC = () => {
             onMouseMove={handleMove}
             onTouchMove={handleMove}
           >
-            {/* After Image */}
+            {/* After Image: High gloss, polished car */}
             <div 
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: 'url(https://picsum.photos/seed/aftercar/1200/800)' }}
+              style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1603584173870-7f340866037a?auto=format&fit=crop&q=80&w=1200)' }}
             />
-            {/* Before Image */}
+            {/* Before Image: Scratched, dull paint */}
             <div 
               className="absolute inset-0 bg-cover bg-center"
               style={{ 
-                backgroundImage: 'url(https://picsum.photos/seed/beforecar/1200/800)',
-                clipPath: `inset(0 ${100 - sliderPos}% 0 0)`
+                backgroundImage: 'url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1200)',
+                clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                filter: 'saturate(0.5) contrast(0.8) brightness(0.8)'
               }}
             />
             {/* Labels */}
-            <div className="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Antes</div>
-            <div className="absolute top-4 right-4 bg-[#40E0D0]/80 text-black px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Depois</div>
+            <div className="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded text-xs font-bold uppercase tracking-widest pointer-events-none">Antes</div>
+            <div className="absolute top-4 right-4 bg-[#40E0D0]/80 text-black px-3 py-1 rounded text-xs font-bold uppercase tracking-widest pointer-events-none">Depois</div>
             
             {/* Handle */}
             <div 

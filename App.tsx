@@ -4,8 +4,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import LocationPage from './pages/LocationPage';
 import FloatingButtons from './components/FloatingButtons';
-import { Instagram, Facebook, Phone, Mail, Menu, X, Heart } from 'lucide-react';
-import { COLORS } from './constants';
+import { Instagram, Facebook, Phone, Mail, Menu, X, Heart, ArrowRight } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,55 +12,75 @@ const Header: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
   return (
-    <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-lg py-4 border-b border-white/5' : 'bg-transparent py-8'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
+      scrolled 
+        ? 'bg-black/80 backdrop-blur-2xl py-3 border-b border-white/10' 
+        : 'bg-transparent py-6'
+    }`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 group">
-           <div className="w-12 h-12 bg-gradient-to-br from-[#40E0D0] to-[#008080] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(64,224,208,0.3)] group-hover:scale-110 transition-transform">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        <Link to="/" className="flex items-center gap-3 group">
+           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#40E0D0] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(64,224,208,0.2)] group-hover:rotate-12 transition-all">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
            </div>
            <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tighter leading-none">FAST CAR</span>
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[#40E0D0]">ESTÉTICA AUTOMOTIVA</span>
+              <span className="text-xl sm:text-2xl font-black tracking-tighter leading-none italic">FAST CAR</span>
+              <span className="text-[8px] sm:text-[10px] font-bold tracking-[0.3em] text-[#40E0D0] uppercase">Estética Automotiva</span>
            </div>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
-          <Link to="/" className="text-sm font-bold hover:text-[#40E0D0] transition-colors">HOME</Link>
-          <a href="#servicos" className="text-sm font-bold hover:text-[#40E0D0] transition-colors">SERVIÇOS</a>
-          <a href="#locations" className="text-sm font-bold hover:text-[#40E0D0] transition-colors">LOCALIDADES</a>
-          <a href="#contato" className="bg-[#40E0D0] text-black px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-all">ORÇAMENTO</a>
+        <div className="hidden lg:flex items-center gap-10">
+          <Link to="/" className="text-xs font-black hover:text-[#40E0D0] transition-colors tracking-widest uppercase">Home</Link>
+          <a href="#servicos" className="text-xs font-black hover:text-[#40E0D0] transition-colors tracking-widest uppercase">Serviços</a>
+          <a href="#locations" className="text-xs font-black hover:text-[#40E0D0] transition-colors tracking-widest uppercase">Localidades</a>
+          <a href="#contato" className="bg-white text-black px-8 py-3 rounded-full text-xs font-black hover:bg-[#40E0D0] transition-all uppercase tracking-widest">
+            Orçamento
+          </a>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
-           {isOpen ? <X size={32} /> : <Menu size={32} />}
+        <button className="lg:hidden text-white p-2 hover:bg-white/5 rounded-lg" onClick={() => setIsOpen(!isOpen)}>
+           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden fixed inset-0 bg-black z-50 transition-transform duration-500 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-         <div className="p-8 flex flex-col h-full">
+      {/* Mobile Menu Refined */}
+      <div className={`lg:hidden fixed inset-0 bg-black z-[110] transition-all duration-700 ease-in-out ${
+        isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'
+      }`}>
+         <div className="p-8 flex flex-col h-full bg-[#050505]">
             <div className="flex justify-between items-center mb-16">
-               <span className="text-2xl font-black">FAST CAR</span>
-               <button onClick={() => setIsOpen(false)}><X size={40} /></button>
+               <span className="text-2xl font-black italic">FAST CAR</span>
+               <button onClick={() => setIsOpen(false)} className="p-2 bg-white/5 rounded-full"><X size={32} /></button>
             </div>
-            <div className="flex flex-col gap-8 text-3xl font-black">
-               <Link to="/" onClick={() => setIsOpen(false)}>HOME</Link>
-               <a href="#servicos" onClick={() => setIsOpen(false)}>SERVIÇOS</a>
-               <a href="#locations" onClick={() => setIsOpen(false)}>LOCALIDADES</a>
-               <a href="#contato" onClick={() => setIsOpen(false)} className="text-[#40E0D0]">ORÇAMENTO</a>
+            <div className="flex flex-col gap-6 text-4xl font-black uppercase tracking-tighter">
+               <Link to="/" onClick={() => setIsOpen(false)} className="hover:text-[#40E0D0] transition-colors">Home</Link>
+               <a href="#servicos" onClick={() => setIsOpen(false)} className="hover:text-[#40E0D0] transition-colors">Serviços</a>
+               <a href="#locations" onClick={() => setIsOpen(false)} className="hover:text-[#40E0D0] transition-colors">Localidades</a>
+               <a href="#contato" onClick={() => setIsOpen(false)} className="text-[#40E0D0] flex items-center gap-4">
+                 Orçamento <ArrowRight size={32} />
+               </a>
             </div>
-            <div className="mt-auto flex gap-6">
-               <Instagram size={32} />
-               <Facebook size={32} />
-               <Phone size={32} />
+            <div className="mt-auto pt-10 border-t border-white/10 space-y-8">
+               <div className="flex gap-6">
+                  <Instagram size={28} className="text-gray-500 hover:text-white transition-colors" />
+                  <Facebook size={28} className="text-gray-500 hover:text-white transition-colors" />
+               </div>
+               <div className="space-y-2">
+                 <p className="text-xs font-bold text-gray-600 uppercase tracking-widest">Fale Conosco</p>
+                 <p className="text-xl font-black">(41) 99162-3753</p>
+               </div>
             </div>
          </div>
       </div>
@@ -73,68 +92,59 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-[#050505] pt-24 pb-12 border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           <div className="space-y-6">
-            <h3 className="text-2xl font-black">FAST CAR</h3>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              Referência em estética automotiva premium em Curitiba e Região Metropolitana. Unindo tecnologia, paixão e artesania para cuidar do seu veículo como se fosse nosso.
+            <h3 className="text-2xl font-black italic">FAST CAR</h3>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
+              O mais alto padrão em detalhamento automotivo de Curitiba. Materiais premium e mão de obra especializada.
             </p>
             <div className="flex gap-4">
-              <a href="https://instagram.com/ffastcar" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
-                <Instagram size={20} />
+              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
+                <Instagram size={18} />
               </a>
-              <a href="https://facebook.com/FastCarEsteticaAutomotiva" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
-                <Facebook size={20} />
+              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
+                <Facebook size={18} />
               </a>
             </div>
           </div>
           
           <div className="space-y-6">
-            <h4 className="font-bold uppercase tracking-widest text-xs text-[#40E0D0]">Serviços</h4>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li className="hover:text-white cursor-pointer transition-colors">Polimento Técnico</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Lavagem Detalhada</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Martelinho de Ouro</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Envelopamento</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Auto Elétrica</li>
+            <h4 className="font-bold uppercase tracking-widest text-[10px] text-[#40E0D0]">Nossos Serviços</h4>
+            <ul className="space-y-3 text-sm text-gray-500 font-medium">
+              <li className="hover:text-[#40E0D0] cursor-pointer transition-colors">Polimento Cerâmico</li>
+              <li className="hover:text-[#40E0D0] cursor-pointer transition-colors">Vitrificação 9H</li>
+              <li className="hover:text-[#40E0D0] cursor-pointer transition-colors">Lavagem de Detalhe</li>
+              <li className="hover:text-[#40E0D0] cursor-pointer transition-colors">Higienização</li>
+              <li className="hover:text-[#40E0D0] cursor-pointer transition-colors">Martelinho VIP</li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="font-bold uppercase tracking-widest text-xs text-[#40E0D0]">Horários</h4>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li>Segunda a Sexta: 08h às 19h</li>
-              <li>Sábado: 08h às 19h</li>
-              <li className="text-red-500/50">Domingo: Fechado</li>
+            <h4 className="font-bold uppercase tracking-widest text-[10px] text-[#40E0D0]">Localização</h4>
+            <ul className="space-y-3 text-sm text-gray-500 font-medium">
+              <li>Curitiba - PR</li>
+              <li>Bairro Batel / Seminário</li>
+              <li>Região Metropolitana</li>
+              <li className="text-[#40E0D0]">Atendimento Delivery</li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="font-bold uppercase tracking-widest text-xs text-[#40E0D0]">Contato</h4>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li className="flex items-center gap-3">
-                <Phone size={16} className="text-[#40E0D0]" />
-                (41) 99162-3753
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail size={16} className="text-[#40E0D0]" />
-                fastcarautomotivo821@gmail.com
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin size={16} className="text-[#40E0D0] mt-1" />
-                Curitiba/PR - CEP 81070-100
-              </li>
-            </ul>
+            <h4 className="font-bold uppercase tracking-widest text-[10px] text-[#40E0D0]">Direto ao Ponto</h4>
+            <a href="#contato" className="block p-4 rounded-2xl bg-[#111] border border-white/5 hover:border-[#40E0D0]/50 transition-all group">
+               <p className="text-[10px] uppercase font-bold text-gray-600 mb-1 group-hover:text-[#40E0D0]">WhatsApp</p>
+               <p className="text-lg font-black text-white">(41) 99162-3753</p>
+            </a>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-600">
-            © 2024 Fast Car Estética Automotiva. CNPJ: 33.131.915/0001-95. Todos os direitos reservados.
+          <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest text-center">
+            © 2024 Fast Car Estética Automotiva. CNPJ: 33.131.915/0001-95.
           </p>
-          <div className="flex items-center gap-2 text-xs text-gray-600 font-bold uppercase tracking-widest">
-            Desenvolvido com <Heart size={14} className="text-red-500 animate-pulse fill-red-500" /> por 
-            <a href="https://supremasite.com.br" className="text-white hover:text-[#40E0D0] transition-colors">Suprema Sites Express</a>
+          <div className="flex items-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-widest">
+            Made with <Heart size={12} className="text-red-500 fill-red-500 animate-pulse" /> by 
+            <a href="https://supremasite.com.br" className="text-white hover:text-[#40E0D0] transition-colors">Suprema Sites</a>
           </div>
         </div>
       </div>
@@ -144,7 +154,7 @@ const Footer: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-[#40E0D0] selection:text-black">
+    <div className="min-h-screen bg-black text-white selection:bg-[#40E0D0] selection:text-black antialiased">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -155,10 +165,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-// Simple icon wrapper for Footer
-const MapPin = ({ size, className }: { size: number, className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-);
 
 export default App;

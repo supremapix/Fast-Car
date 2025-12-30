@@ -39,7 +39,7 @@ const LocationPage: React.FC = () => {
                 <p className="text-xl text-gray-300 leading-relaxed">
                   A <strong>Fast Car Estética Automotiva</strong> orgulha-se de oferecer seus serviços especializados de alto padrão para todos os moradores de <strong>{locationName}</strong>. Com anos de experiência no mercado de Curitiba e Região Metropolitana, entendemos que o seu veículo não é apenas um meio de transporte, mas um investimento e uma paixão que merece o melhor cuidado possível.
                 </p>
-                <img src="https://picsum.photos/seed/detailing1/1200/500" className="rounded-3xl w-full h-80 object-cover grayscale" alt="Estética Automotiva" />
+                <img src="https://images.unsplash.com/photo-1597766323165-8167f603c734?auto=format&fit=crop&q=80&w=1200" className="rounded-3xl w-full h-80 object-cover grayscale" alt="Estética Automotiva" />
                 <p className="text-gray-400">
                   Nossa presença em {locationName} visa trazer a conveniência e a qualidade de showroom para mais perto de você. Seja para um polimento técnico que remove riscos superficiais ou uma lavagem detalhada que renova cada canto do seu carro, nossa equipe está preparada para superar suas expectativas com produtos de marcas líderes mundiais.
                 </p>
@@ -67,7 +67,7 @@ const LocationPage: React.FC = () => {
                     Muitos clientes em {locationName} nos procuram buscando valorizar o veículo para revenda ou simplesmente para manter a estética impecável no dia a dia. Temos pacotes personalizados para cada necessidade.
                   </p>
                 </div>
-                <img src="https://picsum.photos/seed/polishing/600/600" className="rounded-3xl h-full object-cover" alt="Polimento" />
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600" className="rounded-3xl h-full object-cover" alt="Polimento" />
               </div>
 
               {/* Text 3: Why choose us */}
