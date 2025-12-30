@@ -1,0 +1,7 @@
+{
+  "name": "Fast Car Estética Automotiva",
+  "description": "Landing page premium de alta conversão para serviços de estética automotiva em Curitiba e Região Metropolitana.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
