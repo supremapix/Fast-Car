@@ -4,6 +4,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import LocationPage from './pages/LocationPage';
 import FloatingButtons from './components/FloatingButtons';
+import Watermark from './components/Watermark';
 import { Instagram, Facebook, Phone, Mail, Menu, X, Heart, ArrowRight } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -99,10 +100,10 @@ const Footer: React.FC = () => {
               O mais alto padrão em detalhamento automotivo de Curitiba. Materiais premium e mão de obra especializada.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
+              <a href="https://supremasite.com.br" target="_blank" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
                 <Instagram size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
+              <a href="https://supremasite.com.br" target="_blank" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#40E0D0] hover:text-black transition-all">
                 <Facebook size={18} />
               </a>
             </div>
@@ -143,8 +144,8 @@ const Footer: React.FC = () => {
             © 2024 Fast Car Estética Automotiva. CNPJ: 33.131.915/0001-95.
           </p>
           <div className="flex items-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-widest">
-            Made with <Heart size={12} className="text-red-500 fill-red-500 animate-pulse" /> by 
-            <a href="https://supremasite.com.br" className="text-white hover:text-[#40E0D0] transition-colors">Suprema Sites</a>
+            Desenvolvido ❤️ por 
+            <a href="https://supremasite.com.br" target="_blank" className="text-white hover:text-[#40E0D0] transition-colors underline decoration-[#40E0D0]/30 underline-offset-4">Suprema Sites Express</a>
           </div>
         </div>
       </div>
@@ -155,6 +156,7 @@ const Footer: React.FC = () => {
 const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-[#40E0D0] selection:text-black antialiased">
+      <Watermark />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
